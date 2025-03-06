@@ -1,5 +1,15 @@
 document.getElementById("fileInput").addEventListener("change", processCSV);
 
+let allSeats = [];
+
+// Load seats from JSON file
+fetch("seats.json")
+  .then((response) => response.json())
+  .then((data) => {
+    allSeats = data;
+  })
+  .catch((error) => console.error("Error loading seat data:", error));
+
 function processCSV() {
   const fileInput = document.getElementById("fileInput");
   const errorMessage = document.getElementById("errorMessage");
@@ -254,4 +264,91 @@ function downloadPDF() {
   });
 
   doc.save(filename);
+}
+function printAll() {
+  const table = document.getElementById("outputTable");
+  const allRows = Array.from(table.getElementsByTagName("tr")).slice(1);
+  const vipRows = allRows.filter((row) =>
+    row.classList.contains("vip-highlight")
+  );
+
+  let printWindow = window.open("", "", "width=900,height=800");
+
+  // Sorting functions
+  function sortByName(rows) {
+    return [...rows].sort((a, b) =>
+      a.cells[0].textContent.localeCompare(b.cells[0].textContent)
+    );
+  }
+
+  function sortBySeat(rows) {
+    return [...rows].sort((a, b) => {
+      let rowA = a.cells[3].textContent;
+      let rowB = b.cells[3].textContent;
+      let seatA = parseInt(a.cells[4].textContent);
+      let seatB = parseInt(b.cells[4].textContent);
+      return rowA.localeCompare(rowB) || seatA - seatB;
+    });
+  }
+
+  // Preserve VIP highlighting
+  function generateTableHTML(title, rows) {
+    if (rows.length === 0) return ""; // Skip empty sections
+
+    let tableHTML = `<div class="page-break"><h2>${title}</h2><table>${
+      table.querySelector("thead").innerHTML
+    }<tbody>`;
+    rows.forEach((row) => {
+      let rowHTML = row.outerHTML.replace(
+        'class="vip-highlight"',
+        'style="background-color: gold;"'
+      ); // Ensure VIPs stay highlighted
+      tableHTML += rowHTML;
+    });
+    tableHTML += `</tbody></table></div>`;
+
+    return tableHTML;
+  }
+
+  // Generate all sections
+  let alphabeticalHTML = generateTableHTML(
+    "Full Admission List (Alphabetical)",
+    sortByName(allRows)
+  );
+  let seatOrderHTML = generateTableHTML(
+    "Full Admission List (Seat Order)",
+    sortBySeat(allRows)
+  );
+  let vipHTML = generateTableHTML("VIP Guest List", sortByName(vipRows));
+
+  // CSS Styling
+  const style = `
+      <style>
+          body { font-family: Arial, sans-serif; text-align: center; padding: 10px; background: #fff; }
+          table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 20px; }
+          th, td { padding: 6px; border: 1px solid #ddd; }
+          th { background: #6a0dad; color: white; }
+          
+          /* Ensure VIP guests are highlighted */
+          tr[style*="background-color: gold;"] { font-weight: bold; }
+          
+          /* Page break for each section */
+          .page-break {
+              page-break-before: always;
+              padding-top: 50px; /* Extra space for double-sided printing */
+          }
+          
+          /* Print colors correctly */
+          @media print {
+              tr[style*="background-color: gold;"] { -webkit-print-color-adjust: exact; }
+          }
+      </style>
+  `;
+
+  // Open print window
+  printWindow.document.write(
+    `<html><head><title>Print All</title>${style}</head><body>${alphabeticalHTML}${seatOrderHTML}${vipHTML}</body></html>`
+  );
+  printWindow.document.close();
+  printWindow.print();
 }

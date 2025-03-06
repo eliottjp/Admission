@@ -1,52 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admission List Printer</title>
-    <link rel="stylesheet" href="css/styles.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-</head>
-<body>
-    <div class="container">
-        <h1>Admission List Printer</h1>
-        <div class="file-drop-area">
-            <span class="file-msg">Drag & Drop or Click to Upload</span>
-            <input type="file" id="fileInput" accept=".csv">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admission List Printer</title>
+        <link rel="stylesheet" href="css/styles.css">
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Admission List Printer</h1>
+            <div class="file-drop-area">
+                <span class="file-msg">Drag & Drop or Click to Upload</span>
+                <input type="file" id="fileInput" accept=".csv">
+            </div>
+
+            <p id="errorMessage"></p>
+            <table id="outputTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Confirmation</th>
+                        <th>Section</th>
+                        <th>Row</th>
+                        <th>Seat</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <div class="sidebar">
+                <div class="print-actions">
+                    <button onclick="printAll()">Print All & VIPs</button>
+                </div>
+                <!-- Print Actions -->
+                <div class="print-actions">
+                    <button onclick="printTable('name')">Print A-Z</button>
+                    <button onclick="printTable('seat')">Print Seat
+                        Order</button>
+                    <button onclick="printVIPs()">Print VIPs</button>
+                </div>
+
+                <!-- Download Actions -->
+                <div class="download-actions">
+                    <button onclick="downloadCSV()">Download CSV</button>
+                    <button onclick="downloadPDF()">Download PDF</button>
+                </div>
+            </div>
+
         </div>
 
-        <p id="errorMessage"></p>
-        <table id="outputTable">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Confirmation</th>
-                    <th>Section</th>
-                    <th>Row</th>
-                    <th>Seat</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-
-        <div class="sidebar">
-    <!-- Print Actions -->
-    <div class="print-actions">
-        <button onclick="printTable('name')">Print A-Z</button>
-        <button onclick="printTable('seat')">Print Seat Order</button>
-        <button onclick="printVIPs()">Print VIPs</button>
-    </div>
-    
-    <!-- Download Actions -->
-    <div class="download-actions">
-        <button onclick="downloadCSV()">Download CSV</button>
-        <button onclick="downloadPDF()">Download PDF</button>
-    </div>
-</div>
-
-    </div>
-
-    <script src="js/script.js"></script>
-</body>
+        <script src="js/script.js"></script>
+    </body>
 </html>

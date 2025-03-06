@@ -1,0 +1,14 @@
+[
+  { "section": "A", "row": "1", "seat": "1" },
+  { "section": "A", "row": "1", "seat": "2" },
+  { "section": "A", "row": "1", "seat": "3" },
+  { "section": "A", "row": "2", "seat": "1" },
+  { "section": "A", "row": "2", "seat": "2" },
+  { "section": "A", "row": "2", "seat": "3" },
+  { "section": "B", "row": "1", "seat": "1" },
+  { "section": "B", "row": "1", "seat": "2" },
+  { "section": "B", "row": "1", "seat": "3" },
+  { "section": "B", "row": "2", "seat": "1" },
+  { "section": "B", "row": "2", "seat": "2" },
+  { "section": "B", "row": "2", "seat": "3" }
+]
